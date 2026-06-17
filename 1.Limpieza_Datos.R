@@ -1,11 +1,12 @@
+#se activan los paquetes tidyverse, janitor, skimr
 library(tidyverse)
 library(janitor)
 library(skimr)
 
-#cargamos los datos
+#cargamos los datos usando la función read.csv de Rbase
 datos <- read.csv("Entradas/Base_Prueba.csv")
 
-#damos una revisada a los datos cargados
+#damos una revisada a los datos cargados con la función glimpse de tidyverse
 glimpse(datos)
 
 #vemos un resumen de las variables
