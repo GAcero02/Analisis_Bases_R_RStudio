@@ -1,44 +1,51 @@
 #activamos la libreria tidyverse
 library(tidyverse)
+library(rio)
 
 #cargamos los datos
 datos <- read.csv("Salidas/base_limpia.csv")
 
+
+# Estructura de la base ---------------------------------------------------
 #estructura de la base de datos
+dim(datos)
 str(datos)
 glimpse(datos)
-
-#resumen de los datos
 summary(datos)
 
-#numero de filas y columnas
-dim(datos)
 
-#explorar variables categoricas
-table(datos$sexo)
+# Explorar variables categoricas (tabla exploratoria)  --------------------
+Tabla_sexo <- datos %>%
+  count(edades_agrupadas) %>%
+  mutate(
+    porcentaje = round(n / sum(n) * 100, 2)
+  )
 
-prop.table(
-  table(datos$sexo)
-)
+Tabla_sexo
 
-#explorar variables numericas
-mean(datos$edad)
-median(datos$edad)
-sd(datos$edad)
-range(datos$edad)
+#export(Tabla_sexo, "Salidas/Tabla_Sexo.xlsx") #descomentar eto si se requiere una tabla sencilla
+
+# Explorar variables numericas --------------------
+summary(datos$edad_en_años)
+sd(datos$edad_en_años)
 
 
 #identificar valores faltantes
 sum(is.na(datos))
 colSums(is.na(datos))
 
-#identificación de valores extremos
-boxplot(datos$edad)
-boxplot.stats(datos$edad)$out
 
-#relaciones entre variables
-datos %>%
+#identificación de valores extremos
+boxplot(datos$edad_en_años)
+boxplot.stats(datos$edad_en_años)$out
+
+
+#Relaciones entre variables (una categoricas y una numerica)
+Tabla_etnia_edad <- datos %>%
   group_by(pertenencia_etnica) %>%
   summarise(
     media = mean(edad)
   )
+
+Tabla_etnia_edad
+export(Tabla_etnia_edad, "Salidas/Tabla_pertenecia_edad.xlsx") #descomentar eto si se requiere una tabla sencilla
